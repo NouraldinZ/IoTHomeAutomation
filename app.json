@@ -1,4 +1,12 @@
 {
   "name": "IoTHomeAutomation",
-  "displayName": "IoTHomeAutomation"
+  "displayName": "IoTHomeAutomation",
+  "expo": {
+    "name": "IoTHomeAutomation",
+    "slug": "IoTHomeAutomation",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
 }
