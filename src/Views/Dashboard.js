@@ -23,12 +23,12 @@ class Dashboard extends Component {
       <Block style={styles.dashboard}>
         <Block column style={{marginVertical: theme.sizes.base * 2}}>
           <Text welcome>Hello</Text>
-          <Text name>John Doe</Text>
+          <Text name>Nour Z.</Text>
         </Block>
 
         <Block row style={{paddingVertical: 10}}>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
-            <Text h1>34</Text>
+            <Text h1>22</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
               °C
             </Text>
@@ -103,37 +103,6 @@ class Dashboard extends Component {
                   <FanIcon size={38} />
                   <Text button style={{marginTop: theme.sizes.base * 0.5}}>
                     {settings['fan'].name}
-                  </Text>
-                </Block>
-              </TouchableOpacity>
-            </Block>
-
-            <Block
-              row
-              space="around"
-              style={{marginVertical: theme.sizes.base}}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate('Settings', {name: 'wi-fi'})
-                }>
-                <Block center middle style={styles.button}>
-                  <WiFiIcon size={38} />
-                  <Text button style={{marginTop: theme.sizes.base * 0.5}}>
-                    {settings['wi-fi'].name}
-                  </Text>
-                </Block>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate('Settings', {name: 'electricity'})
-                }>
-                <Block center middle style={styles.button}>
-                  <ElectricityIcon size={38} />
-                  <Text button style={{marginTop: theme.sizes.base * 0.5}}>
-                    {settings['electricity'].name}
                   </Text>
                 </Block>
               </TouchableOpacity>
