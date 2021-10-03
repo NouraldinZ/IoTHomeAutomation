@@ -11,7 +11,7 @@ class Dashboard extends Component {
     header: null,
   };
   render() {
-    const {navigation, settings} = this.props;
+    const {navigation, settings, lights} = this.props;
     const LightIcon = settings['light'].icon;
     const ACIcon = settings['ac'].icon;
     const TempIcon = settings['temperature'].icon;
@@ -98,7 +98,7 @@ class Dashboard extends Component {
 
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('Settings', {name: 'fan'})}>
+                onPress={() => navigation.push('Lights', {name: 'fan'})}>
                 <Block center middle style={styles.button}>
                   <FanIcon size={38} />
                   <Text button style={{marginTop: theme.sizes.base * 0.5}}>
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: theme.sizes.base * 2,
     marginBottom: -theme.sizes.base * 6,
+    backgroundColor: '#fac7c5',
   },
   buttons: {
     flex: 1,

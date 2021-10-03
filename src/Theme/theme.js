@@ -4,7 +4,7 @@ const colors = {
   white: '#FFFFFF',
   gray: '#A7A7A7',
   gray2: '#ECEDEF',
-  button: '#F4F5F7',
+  button: '#b6cdfc',
 };
 
 const sizes = {
@@ -51,8 +51,4 @@ const fonts = {
   },
 };
 
-export {
-  colors,
-  sizes,
-  fonts,
-};
+export {colors, sizes, fonts};

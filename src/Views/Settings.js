@@ -52,7 +52,7 @@ class Settings extends Component {
           <Block column>
             <Icon size={theme.sizes.font * 4} color={theme.colors.gray2} />
             <Block flex={1.2} row style={{alignItems: 'flex-end'}}>
-              <Text h1>27</Text>
+              <Text h1>22</Text>
               <Text h1 size={34} height={80} weight={'600'} spacing={0.1}>
                 °C
               </Text>
