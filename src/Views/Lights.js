@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {StyleSheet, TouchableWithoutFeedback, Slider} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -48,11 +48,7 @@ class Lights extends Component {
     const Icon = settings[name].icon;
 
     return (
-      <Block
-        flex={1}
-        style={{
-          padding: theme.sizes.base * 2,
-        }}>
+      <Block flex={1} style={styles.settings}>
         <ColorPicker
           onColorSelected={color => alert(`Color selected: ${color}`)}
           style={{flex: 1}}
@@ -74,5 +70,3 @@ const styles = StyleSheet.create({
   },
   slider: {},
 });
-
-const [backgroundColor, setBackgroundColor] = useState('#e3aa7f');
