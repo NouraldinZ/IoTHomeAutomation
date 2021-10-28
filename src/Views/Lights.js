@@ -72,14 +72,12 @@ class Lights extends Component {
       <Block flex={1} style={styles.settings}>
         <Block flex={1} center>
           <Block column>
-          <Pressable
-              onPress={this.toggleLight}
-              title={this.state.lightsOn?'ON':'OFF'}
-            >
+          <Pressable 
+            style={({ pressed }) => [{ backgroundColor: pressed? 'rgb(210, 230, 255)': 'white'}]} 
+            onPress={this.toggleLight} title={this.state.lightsOn?'ON':'OFF'}>
               <Icon size={theme.sizes.font * 8} color={this.state.lightsOn?'orange':theme.colors.gray2} />
               <Text style={styles.TextStyle} color={this.state.lightsOn?"green":"red"}>{this.state.lightsOn?'ON':'OFF'}</Text>
-            </Pressable>
-            
+          </Pressable> 
             <Text h2 size={42} height={80} weight={'600'} spacing={0.1}>Lights</Text>
           </Block>
           <Block flex={1} >
