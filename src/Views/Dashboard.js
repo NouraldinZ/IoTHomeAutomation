@@ -57,7 +57,7 @@ class Dashboard extends Component {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
-                  navigation.navigate('Settings', {name: 'light'})
+                  navigation.navigate('Lights', {name: 'light'})
                 }>
                 <Block center middle style={styles.button}>
                   <LightIcon size={38} />
@@ -98,7 +98,7 @@ class Dashboard extends Component {
 
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.push('Lights', {name: 'fan'})}>
+                onPress={() => navigation.push('Settings', {name: 'fan'})}>
                 <Block center middle style={styles.button}>
                   <FanIcon size={38} />
                   <Text button style={{marginTop: theme.sizes.base * 0.5}}>

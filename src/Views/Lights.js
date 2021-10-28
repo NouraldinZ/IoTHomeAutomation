@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, Slider} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, Slider, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import * as theme from '../Theme/theme';
 import {Block, Text, PanSlider} from '../Components';
 import mocks from '../Theme/settings';
-import {ColorPicker} from 'react-native-color-picker';
+import {SliderValuePicker} from 'react-native-color-picker';
 
 class Lights extends Component {
   static navigationOptions = {
@@ -27,8 +27,12 @@ class Lights extends Component {
   };
 
   state = {
-    direction: 45,
-    speed: 12,
+    lightsOn: false,
+    brightness: 1,
+
+    // TODO: Remove
+    direction: 50,
+    speed: 50,
   };
 
   renderController() {
@@ -42,6 +46,14 @@ class Lights extends Component {
     );
   }
 
+  toggleLight(){
+    console.log(!this.state.lightsOn);
+    this.setState(state => ({
+      lightsOn: !state.lightsOn
+    }));
+    // TODO: Send request to Raspberry-Pi to toggle lights switch
+  }
+
   render() {
     const {navigation, settings} = this.props;
     const name = navigation.getParam('name');
@@ -49,14 +61,59 @@ class Lights extends Component {
 
     return (
       <Block flex={1} style={styles.settings}>
+        <Block flex={0.5} row>
+          <Block column>
+            <Icon size={theme.sizes.font * 4} color={theme.colors.gray2} />
+            <Block flex={1.2} row style={{alignItems: 'flex-end'}}>
+              <Text h1>22</Text>
+              <Text h1 size={34} height={80} weight={'600'} spacing={0.1}>
+                °C
+              </Text>
+            </Block>
+            <Text caption>Lights</Text>
+          </Block>
+          <Block flex={1} center>
+            <PanSlider />
+          </Block>
+        </Block>
+        <Block flex={1} style={{paddingTop: theme.sizes.base * 2}}>
+          <Block column style={{marginVertical: theme.sizes.base * 2}}>
+            <Block row space="between">
+              <Text welcome color="black">
+                Brightness
+              </Text>
+              <Text welcome color="black">
+                {this.state.brightness}
+              </Text>
+            </Block>
+            <Slider
+              value={0}
+              mininumValue={0}
+              maximumValue={9}
+              thumbTintColor={theme.colors.accent}
+              minimumTrackTintColor={theme.colors.accent}
+              maximumTrackTintColor={theme.colors.gray2}
+              onValueChange={value =>
+                this.setState({brightness: parseInt(value, 10)})
+              }
+            />
+          </Block>
+        </Block>
+      </Block>
+    );
+  }
+}
+
+/* above return statement (colorpicker)
+return (
+      <Block flex={1} style={styles.settings}>
         <ColorPicker
           onColorSelected={color => alert(`Color selected: ${color}`)}
           style={{flex: 1}}
         />
       </Block>
     );
-  }
-}
+    */
 
 Lights.defaultProps = {
   settings: mocks,
