@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, Slider, View} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, Slider, View, Pressable} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import * as theme from '../Theme/theme';
@@ -27,12 +27,8 @@ class Lights extends Component {
   };
 
   state = {
-    lightsOn: false,
-    brightness: 1,
-
-    // TODO: Remove
-    direction: 50,
-    speed: 50,
+    lightsOn: true,
+    brightness: 5,
   };
 
   renderController() {
@@ -46,12 +42,25 @@ class Lights extends Component {
     );
   }
 
-  toggleLight(){
+  toggleLight = () => {
     console.log(!this.state.lightsOn);
+    console.log(this.state.brightness);
+
     this.setState(state => ({
-      lightsOn: !state.lightsOn
+      lightsOn: !state.lightsOn,
+      brightness: (!state.lightsOn? (state.brightness > 0 ? state.brightness : 1) : 0),
     }));
     // TODO: Send request to Raspberry-Pi to toggle lights switch
+  }
+
+  updatebrightness = (value) => {
+    console.log(!this.state.lightsOn);
+    console.log(this.state.brightness);
+
+    this.setState(() => ({
+      brightness: value,
+      lightsOn: value>0? true:false,
+    }));
   }
 
   render() {
@@ -61,19 +70,19 @@ class Lights extends Component {
 
     return (
       <Block flex={1} style={styles.settings}>
-        <Block flex={0.5} row>
+        <Block flex={1} center>
           <Block column>
-            <Icon size={theme.sizes.font * 4} color={theme.colors.gray2} />
-            <Block flex={1.2} row style={{alignItems: 'flex-end'}}>
-              <Text h1>22</Text>
-              <Text h1 size={34} height={80} weight={'600'} spacing={0.1}>
-                °C
-              </Text>
-            </Block>
-            <Text caption>Lights</Text>
+          <Pressable
+              onPress={this.toggleLight}
+              title={this.state.lightsOn?'ON':'OFF'}
+            >
+              <Icon size={theme.sizes.font * 8} color={this.state.lightsOn?'orange':theme.colors.gray2} />
+              <Text style={styles.TextStyle} color={this.state.lightsOn?"green":"red"}>{this.state.lightsOn?'ON':'OFF'}</Text>
+            </Pressable>
+            
+            <Text h2 size={42} height={80} weight={'600'} spacing={0.1}>Lights</Text>
           </Block>
-          <Block flex={1} center>
-            <PanSlider />
+          <Block flex={1} >
           </Block>
         </Block>
         <Block flex={1} style={{paddingTop: theme.sizes.base * 2}}>
@@ -87,15 +96,14 @@ class Lights extends Component {
               </Text>
             </Block>
             <Slider
-              value={0}
+              value={this.state.brightness}
               mininumValue={0}
               maximumValue={9}
+              step={1}
               thumbTintColor={theme.colors.accent}
               minimumTrackTintColor={theme.colors.accent}
               maximumTrackTintColor={theme.colors.gray2}
-              onValueChange={value =>
-                this.setState({brightness: parseInt(value, 10)})
-              }
+              onValueChange={this.updatebrightness}
             />
           </Block>
         </Block>
@@ -126,4 +134,21 @@ const styles = StyleSheet.create({
     padding: theme.sizes.base * 2,
   },
   slider: {},
+  ButtonStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    borderWidth:2,
+    elevation: 3,
+    backgroundColor: 'white',
+  },
+ 
+  TextStyle:{
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+  },
 });
