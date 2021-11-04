@@ -1,11 +1,16 @@
 import React, {Component} from 'react';
 import {StyleSheet, TouchableWithoutFeedback, Slider, View, Pressable} from 'react-native';
+import { Switch } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import * as theme from '../Theme/theme';
 import {Block, Text, PanSlider} from '../Components';
 import mocks from '../Theme/settings';
-import {SliderValuePicker} from 'react-native-color-picker';
+import {
+  SliderHuePicker,
+  SliderSaturationPicker,
+  SliderValuePicker,
+} from 'react-native-slider-color-picker';
 
 class Lights extends Component {
   static navigationOptions = {
@@ -29,6 +34,7 @@ class Lights extends Component {
   state = {
     lightsOn: true,
     brightness: 5,
+    rgbMode: false,
   };
 
   renderController() {
@@ -54,12 +60,26 @@ class Lights extends Component {
   }
 
   updatebrightness = (value) => {
-    console.log(!this.state.lightsOn);
-    console.log(this.state.brightness);
+    //console.log(!this.state.lightsOn);
+    //console.log(this.state.brightness);
 
     this.setState(() => ({
       brightness: value,
       lightsOn: value>0? true:false,
+    }));
+    // TODO: Send request to Raspberry-Pi
+
+  }
+
+  changeColor = (colorHsvOrRgb, resType) => {
+    //console.log(colorHsvOrRgb, resType);
+    // TODO: Send request to Raspberry-Pi
+
+  }
+
+  changeMode = (mode) => {
+    this.setState(() => ({
+      rgbMode: mode,
     }));
   }
 
@@ -80,11 +100,15 @@ class Lights extends Component {
           </Pressable> 
             <Text h2 size={42} height={80} weight={'600'} spacing={0.1}>Lights</Text>
           </Block>
-          <Block flex={1} >
-          </Block>
         </Block>
-        <Block flex={1} style={{paddingTop: theme.sizes.base * 2}}>
+        <Block flex={1.5} >
           <Block column style={{marginVertical: theme.sizes.base * 2}}>
+            <Block row space="between" style={{paddingBottom:20}}>
+              <Text welcome color="black">
+                RGB mode:
+              </Text>
+              <Switch disabled={!this.state.lightsOn} value={this.state.rgbMode} onValueChange={this.changeMode} />
+            </Block>
             <Block row space="between">
               <Text welcome color="black">
                 Brightness
@@ -103,6 +127,19 @@ class Lights extends Component {
               maximumTrackTintColor={theme.colors.gray2}
               onValueChange={this.updatebrightness}
             />
+            {this.state.lightsOn && this.state.rgbMode && <Block style={{paddingTop:10}}>
+              <Text welcome color="black" style={{paddingBottom: 30}}>
+                Color
+              </Text>
+              
+              <SliderHuePicker
+                enabled={this.state.lightsOn}
+                trackStyle={[{height: 12}]}
+                thumbStyle={styles.thumb}
+                onColorChange={this.changeColor}
+              />
+            </Block>}
+            
           </Block>
         </Block>
       </Block>
@@ -132,16 +169,6 @@ const styles = StyleSheet.create({
     padding: theme.sizes.base * 2,
   },
   slider: {},
-  ButtonStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    borderWidth:2,
-    elevation: 3,
-    backgroundColor: 'white',
-  },
  
   TextStyle:{
     fontSize: 16,
@@ -149,4 +176,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
   },
+
+  thumb: {
+    width: 20,
+    height: 20,
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingTop:40,
+    shadowColor: 'black',
+    shadowOffset: {
+        width: 0,
+        height: 2
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.35,
+},
 });
