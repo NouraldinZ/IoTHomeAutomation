@@ -101,7 +101,7 @@ class Lights extends Component {
             <Text h2 size={42} height={80} weight={'600'} spacing={0.1}>Lights</Text>
           </Block>
         </Block>
-        <Block flex={1.5} >
+        <Block flex={1.25} >
           <Block column style={{marginVertical: theme.sizes.base * 2}}>
             <Block row space="between" style={{paddingBottom:20}}>
               <Text welcome color="black">
