@@ -1,0 +1,1 @@
+// Used for sending http requests for controlling smart lights
