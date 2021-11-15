@@ -70,22 +70,20 @@ class Lights extends Component {
 
   }
 
+  changeMode = (mode) => {
+  	this.setState(state => ({
+	  rgbMode: mode,
+	  brightness: mode?9:state.brightness,
+	}));
+    // TODO: Send request to Raspberry-Pi
+  }
+
   changeColor = (colorHsvOrRgb, resType) => {
 	if (resType == "end") {
 		//console.log(colorHsvOrRgb.h);
 		console.log(this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1));
 		// TODO: Send request to Raspberry-Pi
 	}
-
-
-  }
-
-  changeMode = (mode) => {
-	this.setState(state => ({
-	  rgbMode: mode,
-      brightness: mode?9:state.brightness,
-	}));
-    // TODO: Send request to Raspberry-Pi
   }
 
   HSVtoRGB(h, s, v) {
