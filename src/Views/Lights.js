@@ -9,6 +9,7 @@ import mocks from '../Theme/settings';
 import {
   SliderHuePicker,
 } from 'react-native-slider-color-picker';
+import firebase from "../firebase";
 
 class Lights extends Component {
   static navigationOptions = {
@@ -56,6 +57,13 @@ class Lights extends Component {
 	  rgbMode: false,
 	}));
 	// TODO: Send request to Raspberry-Pi to toggle lights switch
+
+	  //Firebase Test Code to add new user
+	  const user = {
+		  username : 'rithik',
+		  password : 'rithikpwd',
+	  };
+	  //firebase.database().ref("Users").push(user);
   }
 
   updatebrightness = (value) => {
