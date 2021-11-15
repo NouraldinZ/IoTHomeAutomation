@@ -48,8 +48,8 @@ class Lights extends Component {
   }
 
   toggleLight = () => {
-	console.log(!this.state.lightsOn);
-	console.log(this.state.brightness);
+	console.log("LIGHTS:", !this.state.lightsOn);
+	//console.log(this.state.brightness);
 
 	this.setState(state => ({
 	  lightsOn: !state.lightsOn,
@@ -59,16 +59,17 @@ class Lights extends Component {
 	// TODO: Send request to Raspberry-Pi to toggle lights switch
 
 	  //Firebase Test Code to add new user
-	  const user = {
+	  /*const user = {
 		  username : 'rithik',
 		  password : 'rithikpwd',
-	  };
+	  };*/
 	  //firebase.database().ref("Users").push(user);
   }
 
   updatebrightness = (value) => {
 	//console.log(!this.state.lightsOn);
 	//console.log(this.state.brightness);
+	  console.log("BRIGHTNESS:", value);
 
 	this.setState(() => ({
 	  brightness: value,
@@ -79,6 +80,7 @@ class Lights extends Component {
   }
 
   changeMode = (mode) => {
+  	console.log("RGB MODE:", mode);
   	this.setState(state => ({
 	  rgbMode: mode,
 	  brightness: mode?9:state.brightness,
@@ -89,7 +91,7 @@ class Lights extends Component {
   changeColor = (colorHsvOrRgb, resType) => {
 	if (resType == "end") {
 		//console.log(colorHsvOrRgb.h);
-		console.log(this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1));
+		console.log("RGB COLOR:", this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1));
 		// TODO: Send request to Raspberry-Pi
 	}
   }

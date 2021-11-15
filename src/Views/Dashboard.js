@@ -23,7 +23,7 @@ class Dashboard extends Component {
       <Block style={styles.dashboard}>
         <Block column style={{marginVertical: theme.sizes.base * 2}}>
           <Text welcome>Hello</Text>
-          <Text name>Nour Z.</Text>
+          <Text name>{this.props.navigation.state.params.username}</Text>
         </Block>
 
         <Block row style={{paddingVertical: 10}}>
