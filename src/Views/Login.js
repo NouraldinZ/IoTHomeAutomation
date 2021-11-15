@@ -28,28 +28,26 @@ class Login extends Component {
             const users = snapshot.val();
             for(let i in users){
                 //console.log(users[i]);
-                if(users[i].username == usernameEntered && users[i].password == passwordHash){
+                if(users[i].username === usernameEntered && users[i].password === passwordHash){
                     userFound = true;
                     break;
                 }
             }
-        });
-        if(userFound) {
-            console.log("LOGIN SUCCESSFUL -", usernameEntered);
-            navigation.navigate('Dashboard', {username:usernameEntered});
-            this.usrInput.clear();
+            if(userFound) {
+                this.usrInput.clear();
+                this.setState({
+                    username:'',
+                });
+                console.log("LOGIN SUCCESSFUL -", usernameEntered);
+                navigation.navigate('Dashboard', {username:usernameEntered});
+            } else {
+                console.log("LOGIN FAILED!");
+            }
+            this.pwdInput.clear();
             this.setState({
-                username:'',
+                password:'',
             });
-        } else {
-            console.log("LOGIN FAILED!");
-        }
-
-        this.pwdInput.clear();
-        this.setState({
-            password:'',
         });
-        console.log(this.state.password);
 
     };
 
