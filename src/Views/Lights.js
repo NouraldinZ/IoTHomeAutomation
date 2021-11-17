@@ -9,6 +9,7 @@ import mocks from '../Theme/settings';
 import {
   SliderHuePicker,
 } from 'react-native-slider-color-picker';
+import * as lightsApi from '../API/lightsApi';
 import firebase from "../firebase";
 
 class Lights extends Component {
@@ -50,33 +51,28 @@ class Lights extends Component {
   toggleLight = () => {
 	console.log("LIGHTS:", !this.state.lightsOn);
 	//console.log(this.state.brightness);
-
+	let lightState = this.state.lightsOn;
+	let brightnessState = this.state.brightness;
 	this.setState(state => ({
 	  lightsOn: !state.lightsOn,
 	  brightness: (!state.lightsOn? (state.brightness > 0 ? state.brightness : 1) : 0),
 	  rgbMode: false,
 	}));
-	// TODO: Send request to Raspberry-Pi to toggle lights switch
-
-	  //Firebase Test Code to add new user
-	  /*const user = {
-		  username : 'rithik',
-		  password : 'rithikpwd',
-	  };*/
-	  //firebase.database().ref("Users").push(user);
+	// Send request to Raspberry-Pi to toggle lights switch
+  	lightsApi.toggleLights(!lightState, (lightState? (brightnessState > 0 ? brightnessState : 1) : 0));
   }
 
   updatebrightness = (value) => {
 	//console.log(!this.state.lightsOn);
 	//console.log(this.state.brightness);
-	  console.log("BRIGHTNESS:", value);
+  	console.log("BRIGHTNESS:", value);
 
 	this.setState(() => ({
 	  brightness: value,
 	  lightsOn: value>0? true:false,
 	}));
 	// TODO: Send request to Raspberry-Pi
-
+	lightsApi.changeBrightness(value);
   }
 
   changeMode = (mode) => {
@@ -86,13 +82,16 @@ class Lights extends Component {
 	  brightness: mode?9:state.brightness,
 	}));
     // TODO: Send request to Raspberry-Pi
+  	lightsApi.toggleRgbMode(mode);
   }
 
   changeColor = (colorHsvOrRgb, resType) => {
 	if (resType == "end") {
 		//console.log(colorHsvOrRgb.h);
-		console.log("RGB COLOR:", this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1));
+		let rgb = this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1);
+		console.log("RGB COLOR:", rgb);
 		// TODO: Send request to Raspberry-Pi
+		lightsApi.changeColor(rgb);
 	}
   }
 
@@ -115,9 +114,9 @@ class Lights extends Component {
 		case 5: r = v, g = p, b = q; break;
 	}
 	return {
-		r: Math.round(r * 255),
-		g: Math.round(g * 255),
-		b: Math.round(b * 255)
+		red: Math.round(r * 255),
+		green: Math.round(g * 255),
+		blue: Math.round(b * 255)
 	};
   }
 

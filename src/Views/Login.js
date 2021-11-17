@@ -17,6 +17,12 @@ class Login extends Component {
         header: null,
     };
     login = () => {
+        //Firebase add new user
+        /*const user = {
+            username : 'rithik',
+            password : 'rithikpwd',
+        };*/
+        //firebase.database().ref("Users").push(user);
         const {navigation, settings, lights} = this.props;
 
         const usernameEntered = this.state.username;

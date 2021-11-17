@@ -1,12 +1,12 @@
 
-const baseUrl = 'http://localhost:19002/'; // Flask server base url
+export const baseUrl = 'http://localhost:19002'; //TODO: update baseUrl to flask server
 
-const requestMethods = {
+export const requestMethods = {
     get: 'GET',
     post: 'POST',
 }
 
-const sendHttpRequest = (method, url, data) => {
+export const sendHttpRequest = (method, url, data) => {
     const promise = new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url);
@@ -26,7 +26,7 @@ const sendHttpRequest = (method, url, data) => {
         };
 
         xhr.onerror = () => {
-            reject('Something went wrong!');
+            reject('Error Occurred!');
         };
 
         xhr.send(JSON.stringify(data));
