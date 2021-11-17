@@ -63,7 +63,7 @@ class Login extends Component {
             //Firebase add new user
             const user = {
                 username : this.state.username,
-                password : this.state.password,
+                password : sha256(this.state.password),
             };
             console.log("CREATED ACCOUNT:", user);
             firebase.database().ref("Users").push(user);
