@@ -21,7 +21,7 @@ class Dashboard extends Component {
     const ElectricityIcon = settings['electricity'].icon;
 
     return (
-      <LinearGradient style={styles.background} colors={['#f9ffb2', '#72a5ff', '#408dff']} >
+      <LinearGradient style={styles.background} colors={['#fcd6bd', '#72a5ff', '#408dff']} >
       <Block style={styles.dashboard}>
         <Block column style={{marginVertical: theme.sizes.base * 2}}>
           <Text size={26} bold name>Hello {this.props.navigation.state.params.username}!</Text>
