@@ -141,7 +141,7 @@ class Login extends Component {
                         <Block
                             row
                             space="around"
-                            style={{marginVertical: theme.sizes.base, paddingTop: 50}}>
+                            style={{marginVertical: theme.sizes.base, paddingTop: 20}}>
                             <Block cloumn>
 
 
@@ -171,10 +171,19 @@ class Login extends Component {
                                 && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
                                     Username has to be atleast 5 characters long and Passwords have to atleast 8 characters long!
                                 </Text>}
-                                <Text button center style={{marginTop: theme.sizes.base * 2}}>
+                                <Text bold button center style={{marginTop: theme.sizes.base * 2}}>
                                     Create an Account
                                 </Text>
                             </TouchableOpacity>
+                            {this.state.createAccount &&<TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={()=>this.setState({createAccount:false})}>
+                                <Block center >
+                                    <Text button style={{marginTop: theme.sizes.base*2}}>
+                                        Back to Login
+                                    </Text>
+                                </Block>
+                            </TouchableOpacity>}
                             </Block>
                         </Block>
                     </Block>
