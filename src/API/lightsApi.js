@@ -2,11 +2,12 @@
 import * as apiUtils from './utils';
 
 // Toggle Lights on/off
-export const toggleLights = (lights, brightness) => {
+export const toggleLights = (lights, brightness, mode, rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/power', {//TODO: update baseUrl to flask server
         lights : lights,
         brightness: (!lights? (brightness > 0 ? brightness : 1) : 0),
-        rgbMode: false,
+        rgbMode: mode,
+        color: rgb,
     }).then(responseData => {
         console.log("Successfully sent request: 'toggleLights'\n", responseData);
     }).catch(err => {
@@ -15,9 +16,10 @@ export const toggleLights = (lights, brightness) => {
 }
 
 // Toggle RGB mode on/off
-export const toggleRgbMode = (mode) => {
+export const toggleRgbMode = (mode, rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/mode', {//TODO: update baseUrl to flask server
         rgbMode: mode,
+        color: rgb,
         //brightness: mode?9:state.brightness,
     }).then(responseData => {
         console.log("Successfully sent request: 'toggleRgbMode'\n", responseData);
@@ -30,7 +32,7 @@ export const toggleRgbMode = (mode) => {
 export const changeBrightness = (brightness) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/brightness', { //TODO: update baseUrl to flask server
         brightness: brightness,
-        lightsOn: brightness>0? true:false,
+        //lightsOn: brightness>0? true:false,
     }).then(responseData => {
         console.log("Successfully sent request: 'changeBrightness'\n", responseData);
     }).catch(err => {
@@ -42,7 +44,7 @@ export const changeBrightness = (brightness) => {
 export const changeColor = (rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/color', {//TODO: update baseUrl to flask server
         color: rgb,
-        brightness: 9,
+        //brightness: 9,
     }).then(responseData => {
         console.log("Successfully sent request: 'changeColor'\n", responseData);
     }).catch(err => {

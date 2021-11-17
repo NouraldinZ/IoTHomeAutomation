@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 import {LineChart, Path} from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import * as theme from '../Theme/theme';
@@ -7,22 +7,20 @@ import {Block, Text} from '../Components';
 import mocks from '../Theme/settings';
 import firebase from "../firebase";
 import {sha256} from "js-sha256";
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 class Login extends Component {
     state = {
         username: '',
         password: '',
+        confirmPassword: '',
+        createAccount:false,
     };
     static navigationOptions = {
         header: null,
     };
     login = () => {
-        //Firebase add new user
-        /*const user = {
-            username : 'rithik',
-            password : 'rithikpwd',
-        };*/
-        //firebase.database().ref("Users").push(user);
         const {navigation, settings, lights} = this.props;
 
         const usernameEntered = this.state.username;
@@ -57,6 +55,32 @@ class Login extends Component {
 
     };
 
+    createAccount = () => {
+        if (!this.state.createAccount) {
+            this.setState({createAccount: true});
+        } else if (this.state.createAccount && this.state.username.length>=5
+            && this.state.password.length>=8 && this.state.confirmPassword.length>=8){
+            //Firebase add new user
+            const user = {
+                username : this.state.username,
+                password : this.state.password,
+            };
+            console.log("CREATED ACCOUNT:", user);
+            firebase.database().ref("Users").push(user);
+            this.setState({
+                //username: '',
+                password: '',
+                confirmPassword: '',
+                createAccount:false,
+            });
+
+            //this.usrInput.clear();
+            this.pwdInput.clear();
+            this.confirmPwdInput.clear();
+        }
+
+    }
+
     updateLoginUsername = (u) => {
         this.setState({username: u});
     }
@@ -64,12 +88,15 @@ class Login extends Component {
     updateLoginPassword = (p) => {
         this.setState({password: p});
     }
+    updateConfirmPassword = (p) => {
+        this.setState({confirmPassword: p});
+    }
 
     render() {
-
+        const {navigation, settings, lights} = this.props;
         return (
+            <LinearGradient style={styles.background} colors={['#ffedc3', '#fdc294', '#408dff']} >
             <Block style={styles.dashboard}>
-
                 <ScrollView
                     contentContainerStyle={styles.buttons}
                     showsVerticalScrollIndicator={false}>
@@ -99,25 +126,61 @@ class Login extends Component {
                                 secureTextEntry={true}
                                 onChangeText={this.updateLoginPassword}
                             />
+                            {this.state.createAccount && <Text style={{marginTop: theme.sizes.base * 0.5}}>
+                                Confirm Password:
+                            </Text>}
+                            {this.state.createAccount && <TextInput
+                                ref={input => { this.confirmPwdInput = input }}
+                                style={styles.input}
+                                placeholder={"Confirm Password"}
+                                secureTextEntry={true}
+                                onChangeText={this.updateConfirmPassword}
+                            />}
 
                         </Block>
                         <Block
                             row
                             space="around"
                             style={{marginVertical: theme.sizes.base, paddingTop: 50}}>
-                            <TouchableOpacity
+                            <Block cloumn>
+
+
+                            {!this.state.createAccount &&<TouchableOpacity
                                 activeOpacity={0.8}
                                 onPress={this.login}>
                                 <Block center middle style={styles.button}>
-                                    <Text button style={{marginTop: theme.sizes.base * 0.5}}>
+                                    <Text button style={{marginTop: theme.sizes.base}}>
                                         LOGIN
                                     </Text>
                                 </Block>
+                            </TouchableOpacity>}
+                            <TouchableOpacity
+                                activeOpacity={0.8}
+                                onPress={this.createAccount}
+                                >
+
+                                {this.state.createAccount
+                                && this.state.password!= this.state.confirmPassword
+                                && (this.state.password!='' || this.state.confirmPassword!='')
+                                    && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
+                                    Password do not match!
+                                </Text>}
+                                {this.state.createAccount
+                                && (this.state.username < 5 || this.state.password.length < 8)
+                                && (this.state.username!='' || this.state.password!='')
+                                && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
+                                    Username has to be atleast 5 characters long and Passwords have to atleast 8 characters long!
+                                </Text>}
+                                <Text button center style={{marginTop: theme.sizes.base * 2}}>
+                                    Create an Account
+                                </Text>
                             </TouchableOpacity>
+                            </Block>
                         </Block>
                     </Block>
                 </ScrollView>
             </Block>
+            </LinearGradient>
         );
     }
 }
@@ -133,7 +196,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: theme.sizes.base * 2,
         marginBottom: -theme.sizes.base * 6,
-        backgroundColor: '#ffe5ba',
+        //backgroundColor: '#ffe5ba',
         alignContent:"center",
     },
     buttons: {
@@ -142,14 +205,21 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: theme.colors.button,
-        width: 151,
-        height: 151,
-        borderRadius: 151 / 2,
+        width: 125,
+        height: 125,
+        borderRadius: 125 / 2,
     },
     input: {
         height: 40,
         margin: 12,
         borderWidth: 1,
         padding: 10,
+    },
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: Dimensions.get('window').height,
     },
 });

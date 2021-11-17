@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {LineChart, Path} from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import * as theme from '../Theme/theme';
 import {Block, Text} from '../Components';
 import mocks from '../Theme/settings';
+import { LinearGradient } from 'expo-linear-gradient';
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -20,10 +21,10 @@ class Dashboard extends Component {
     const ElectricityIcon = settings['electricity'].icon;
 
     return (
+      <LinearGradient style={styles.background} colors={['#83b3ff', '#5f9dff', '#408dff']} >
       <Block style={styles.dashboard}>
         <Block column style={{marginVertical: theme.sizes.base * 2}}>
-          <Text welcome>Hello</Text>
-          <Text name>{this.props.navigation.state.params.username}</Text>
+          <Text name>Hello {this.props.navigation.state.params.username}!</Text>
         </Block>
 
         <Block row style={{paddingVertical: 10}}>
@@ -34,7 +35,7 @@ class Dashboard extends Component {
             </Text>
           </Block>
           <Block flex={1} column>
-            <Text caption>Humidity</Text>
+            <Text name>Humidity</Text>
             <LineChart
               yMax={100}
               yMin={0}
@@ -110,6 +111,7 @@ class Dashboard extends Component {
           </Block>
         </ScrollView>
       </Block>
+      </LinearGradient>
     );
   }
 }
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: theme.sizes.base * 2,
     marginBottom: -theme.sizes.base * 6,
-    backgroundColor: '#fac7c5',
+    //backgroundColor: '#fac7c5',
   },
   buttons: {
     flex: 1,
@@ -136,5 +138,12 @@ const styles = StyleSheet.create({
     width: 151,
     height: 151,
     borderRadius: 151 / 2,
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: Dimensions.get('window').height,
   },
 });

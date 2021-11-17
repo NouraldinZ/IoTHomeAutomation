@@ -35,6 +35,7 @@ class Lights extends Component {
 	lightsOn: true,
 	brightness: 5,
 	rgbMode: false,
+  	color: {red: 255, blue: 0, green: 0},
   };
 
   renderController() {
@@ -50,19 +51,22 @@ class Lights extends Component {
 
   toggleLight = () => {
 	console.log("LIGHTS:", !this.state.lightsOn);
-	//console.log(this.state.brightness);
+	console.log(this.state.brightness);
+	console.log(this.state.color);
 	let lightState = this.state.lightsOn;
 	let brightnessState = this.state.brightness;
+	let rgbModeState = this.state.rgbMode;
 	this.setState(state => ({
-	  lightsOn: !state.lightsOn,
-	  brightness: (!state.lightsOn? (state.brightness > 0 ? state.brightness : 1) : 0),
-	  rgbMode: false,
+		lightsOn: !state.lightsOn,
+		brightness: (!state.lightsOn ? (state.rgbMode ? 9 : (state.brightness > 0 ? state.brightness : 1)) : 0),
+		color: {red: 255, blue: 0, green: 0},
 	}));
 	// Send request to Raspberry-Pi to toggle lights switch
-  	lightsApi.toggleLights(!lightState, (lightState? (brightnessState > 0 ? brightnessState : 1) : 0));
+  	lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
+		rgbModeState, this.state.color);
   }
 
-  updatebrightness = (value) => {
+  updateBrightness = (value) => {
 	//console.log(!this.state.lightsOn);
 	//console.log(this.state.brightness);
   	console.log("BRIGHTNESS:", value);
@@ -82,13 +86,16 @@ class Lights extends Component {
 	  brightness: mode?9:state.brightness,
 	}));
     // TODO: Send request to Raspberry-Pi
-  	lightsApi.toggleRgbMode(mode);
+  	lightsApi.toggleRgbMode(mode, this.state.color);
   }
 
   changeColor = (colorHsvOrRgb, resType) => {
 	if (resType == "end") {
 		//console.log(colorHsvOrRgb.h);
 		let rgb = this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1);
+		this.setState({
+			color: rgb,
+		});
 		console.log("RGB COLOR:", rgb);
 		// TODO: Send request to Raspberry-Pi
 		lightsApi.changeColor(rgb);
@@ -163,7 +170,7 @@ class Lights extends Component {
 			  thumbTintColor={this.state.rgbMode? theme.colors.gray : theme.colors.accent}
 			  minimumTrackTintColor={this.state.rgbMode? theme.colors.gray : theme.colors.accent}
 			  maximumTrackTintColor={theme.colors.gray2}
-			  onValueChange={this.updatebrightness}
+			  onValueChange={this.updateBrightness}
 			/>
 			{this.state.lightsOn && this.state.rgbMode && <Block style={{paddingTop:10}}>
 			  <Text welcome color="black" style={{paddingBottom: 30}}>
@@ -229,5 +236,5 @@ const styles = StyleSheet.create({
 	},
 	shadowRadius: 2,
 	shadowOpacity: 0.35,
-},
+  },
 });
