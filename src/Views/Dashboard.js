@@ -21,13 +21,13 @@ class Dashboard extends Component {
     const ElectricityIcon = settings['electricity'].icon;
 
     return (
-      <LinearGradient style={styles.background} colors={['#83b3ff', '#5f9dff', '#408dff']} >
+      <LinearGradient style={styles.background} colors={['#f9ffb2', '#72a5ff', '#408dff']} >
       <Block style={styles.dashboard}>
         <Block column style={{marginVertical: theme.sizes.base * 2}}>
-          <Text name>Hello {this.props.navigation.state.params.username}!</Text>
+          <Text size={26} bold name>Hello {this.props.navigation.state.params.username}!</Text>
         </Block>
 
-        <Block row style={{paddingVertical: 10}}>
+        <Block row>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
             <Text h1>22</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
@@ -35,7 +35,7 @@ class Dashboard extends Component {
             </Text>
           </Block>
           <Block flex={1} column>
-            <Text name>Humidity</Text>
+            <Text name color={'grey'} size={18} >Humidity</Text>
             <LineChart
               yMax={100}
               yMin={0}
