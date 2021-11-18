@@ -8,6 +8,7 @@ import mocks from '../Theme/settings';
 import firebase from "../firebase";
 import {sha256} from "js-sha256";
 import { LinearGradient } from 'expo-linear-gradient';
+import Toast from 'react-native-root-toast';
 
 
 class Login extends Component {
@@ -49,6 +50,9 @@ class Login extends Component {
                     navigation.navigate('Dashboard', {username: usernameEntered});
                 } else {
                     console.log("LOGIN FAILED!");
+                    Toast.show('Incorrect Username or Password!', {
+                        duration: Toast.durations.SHORT,
+                    });
                 }
                 this.pwdInput.clear();
                 this.setState({
