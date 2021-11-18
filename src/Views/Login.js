@@ -87,6 +87,9 @@ class Login extends Component {
                 //this.usrInput.clear();
                 this.pwdInput.clear();
                 this.confirmPwdInput.clear();
+                Toast.show('Successfully Created Account!', {
+                    duration: Toast.durations.SHORT,
+                });
             }
             this.setState({loading:false});
         }
@@ -106,7 +109,7 @@ class Login extends Component {
     }
 
     render() {
-        const {navigation, settings, lights} = this.props;
+
         return (
             <LinearGradient style={styles.background} colors={['#ffedc3', '#fdc294', '#408dff']} >
             <Block style={styles.dashboard}>
