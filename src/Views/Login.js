@@ -16,68 +16,77 @@ class Login extends Component {
         password: '',
         confirmPassword: '',
         createAccount:false,
+        loading: false,
     };
     static navigationOptions = {
         header: null,
     };
     login = () => {
-        const {navigation, settings, lights} = this.props;
 
-        const usernameEntered = this.state.username;
-        const passwordHash = sha256(this.state.password);
-        //console.log(usernameEntered, passwordHash);
-        const usersRef = firebase.database().ref("Users");
-        let userFound = false;
-        usersRef.on('value', (snapshot) => {
-            const users = snapshot.val();
-            for(let i in users){
-                //console.log(users[i]);
-                if(users[i].username === usernameEntered && users[i].password === passwordHash){
-                    userFound = true;
-                    break;
+        if (!this.state.loading) {
+            this.setState({loading:true});
+            const {navigation, settings, lights} = this.props;
+            const usernameEntered = this.state.username;
+            const passwordHash = sha256(this.state.password);
+            //console.log(usernameEntered, passwordHash);
+            const usersRef = firebase.database().ref("Users");
+            let userFound = false;
+            usersRef.on('value', (snapshot) => {
+                const users = snapshot.val();
+                for (let i in users) {
+                    //console.log(users[i]);
+                    if (users[i].username === usernameEntered && users[i].password === passwordHash) {
+                        userFound = true;
+                        break;
+                    }
                 }
-            }
-            if(userFound) {
-                this.usrInput.clear();
+                if (userFound) {
+                    this.usrInput.clear();
+                    this.setState({
+                        username: '',
+                    });
+                    console.log("LOGIN SUCCESSFUL -", usernameEntered);
+                    navigation.navigate('Dashboard', {username: usernameEntered});
+                } else {
+                    console.log("LOGIN FAILED!");
+                }
+                this.pwdInput.clear();
                 this.setState({
-                    username:'',
+                    password: '',
                 });
-                console.log("LOGIN SUCCESSFUL -", usernameEntered);
-                navigation.navigate('Dashboard', {username:usernameEntered});
-            } else {
-                console.log("LOGIN FAILED!");
-            }
-            this.pwdInput.clear();
-            this.setState({
-                password:'',
             });
-        });
-
+            this.setState({loading:false});
+        }
     };
 
     createAccount = () => {
-        if (!this.state.createAccount) {
-            this.setState({createAccount: true});
-        } else if (this.state.createAccount && this.state.username.length>=5
-            && this.state.password.length>=8 && this.state.confirmPassword.length>=8){
-            //Firebase add new user
-            const user = {
-                username : this.state.username,
-                password : sha256(this.state.password),
-            };
-            console.log("CREATED ACCOUNT:", user);
-            firebase.database().ref("Users").push(user);
-            this.setState({
-                //username: '',
-                password: '',
-                confirmPassword: '',
-                createAccount:false,
-            });
+        if (!this.state.loading) {
+            this.setState({loading: true});
+            if (!this.state.createAccount) {
+                this.setState({createAccount: true});
+            } else if (this.state.createAccount && this.state.username.length >= 5
+                && this.state.password.length >= 8 && this.state.confirmPassword.length >= 8) {
+                //Firebase add new user
+                const user = {
+                    username: this.state.username,
+                    password: sha256(this.state.password),
+                };
+                console.log("CREATED ACCOUNT:", user);
+                firebase.database().ref("Users").push(user);
+                this.setState({
+                    //username: '',
+                    password: '',
+                    confirmPassword: '',
+                    createAccount: false,
+                });
 
-            //this.usrInput.clear();
-            this.pwdInput.clear();
-            this.confirmPwdInput.clear();
+                //this.usrInput.clear();
+                this.pwdInput.clear();
+                this.confirmPwdInput.clear();
+            }
+            this.setState({loading:false});
         }
+
 
     }
 
@@ -143,40 +152,42 @@ class Login extends Component {
                             space="around"
                             style={{marginVertical: theme.sizes.base, paddingTop: 20}}>
                             <Block cloumn>
+                            {this.state.createAccount
+                            && this.state.password!= this.state.confirmPassword
+                            && (this.state.password!='' || this.state.confirmPassword!='')
+                            && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
+                                Password do not match!
+                            </Text>}
+                            {this.state.createAccount
+                            && (this.state.username < 5 || this.state.password.length < 8)
+                            && (this.state.username!='' || this.state.password!='')
+                            && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
+                                Username has to be atleast 5 characters long and Passwords have to atleast 8 characters long!
+                            </Text>}
 
 
                             {!this.state.createAccount &&<TouchableOpacity
+                                disabled={this.state.loading}
                                 activeOpacity={0.8}
                                 onPress={this.login}>
                                 <Block center middle style={styles.button}>
-                                    <Text button style={{marginTop: theme.sizes.base}}>
+                                    <Text button>
                                         LOGIN
                                     </Text>
                                 </Block>
                             </TouchableOpacity>}
                             <TouchableOpacity
+                                disabled={this.state.loading}
                                 activeOpacity={0.8}
                                 onPress={this.createAccount}
                                 >
-
-                                {this.state.createAccount
-                                && this.state.password!= this.state.confirmPassword
-                                && (this.state.password!='' || this.state.confirmPassword!='')
-                                    && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
-                                    Password do not match!
-                                </Text>}
-                                {this.state.createAccount
-                                && (this.state.username < 5 || this.state.password.length < 8)
-                                && (this.state.username!='' || this.state.password!='')
-                                && <Text center style={{marginTop: theme.sizes.base * 2, color:'red'}}>
-                                    Username has to be atleast 5 characters long and Passwords have to atleast 8 characters long!
-                                </Text>}
                                 <Text bold button center style={{marginTop: theme.sizes.base * 2}}>
                                     Create an Account
                                 </Text>
                             </TouchableOpacity>
                             {this.state.createAccount &&<TouchableOpacity
                                 activeOpacity={0.8}
+                                disabled={this.state.loading}
                                 onPress={()=>this.setState({createAccount:false})}>
                                 <Block center >
                                     <Text button style={{marginTop: theme.sizes.base*2}}>
