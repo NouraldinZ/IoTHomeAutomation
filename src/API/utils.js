@@ -19,14 +19,14 @@ export const sendHttpRequest = (method, url, data) => {
 
         xhr.onload = () => {
             if (xhr.status >= 400) {
-                reject(xhr.response);
+                reject(xhr._response);
             } else {
                 resolve(xhr.response);
             }
         };
 
         xhr.onerror = () => {
-            reject('Error Occurred!');
+            reject('Error Occurred! STATUS: ', xhr.status, xhr.statusText);
         };
 
         xhr.send(JSON.stringify(data));
