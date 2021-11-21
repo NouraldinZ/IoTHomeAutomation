@@ -1,15 +1,29 @@
 from flask import Flask
 import json
+from flask import request
+
+import sys
+sys.path.insert(1, '../../smart_light/BeewiPy')
+from BeewiPy import BeewiSmartBulb
+import time
+
+
+MAC_ADDRESS = "7C:EC:79:67:81:A2"
+myBulb = BeewiSmartBulb(MAC_ADDRESS)
 
 app = Flask(__name__)
 @app.route('/smartLight/power',methods=['POST'])
-def index():
-        # some JSON:
-        x =  '{ "name":"John", "age":30, "city":"New York"}'
 
-        # parse x:
-        y = json.loads(x)
-        return y["age"]
+def toggleLights():
+    request_data = request.get_json()
+    if(request_data['lights']==True):
+        try:
+            myBulb.turnOn()
+        except Exception as e:
+            print(e)
+            print("Cannot connect to Bluetooth device")
 
-if __name__ == '__main__':
-    app.run(debug=True, port=80, host='0.0.0.0')
+    print(request_data)
+    return " "
+
+@app.route('/smartLight/brightness',methods=['POST'])
