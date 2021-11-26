@@ -16,13 +16,13 @@ export default {
       />
     ),
   },
-  'ac': {
-    name: 'AC',
+  'audio': {
+    name: 'Audio',
     icon: ({size, color, ...props}) => (
-      <MaterialCommunityIcons
+      <FontAwesome
         size={size || theme.sizes.font}
         color={color || theme.colors.accent}
-        name="air-conditioner"
+        name="volume-up"
         {...props}
       />
     ),

@@ -14,7 +14,7 @@ class Dashboard extends Component {
   render() {
     const {navigation, settings, lights} = this.props;
     const LightIcon = settings['light'].icon;
-    const ACIcon = settings['ac'].icon;
+    const AudioIcon = settings['audio'].icon;
     const TempIcon = settings['temperature'].icon;
     const FanIcon = settings['fan'].icon;
     const WiFiIcon = settings['wi-fi'].icon;
@@ -49,7 +49,8 @@ class Dashboard extends Component {
 
         <ScrollView
           contentContainerStyle={styles.buttons}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          >
           <Block column space="between">
             <Block
               row
@@ -70,11 +71,11 @@ class Dashboard extends Component {
 
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => navigation.navigate('Settings', {name: 'ac'})}>
+                onPress={() => navigation.navigate('Audio', {name: 'audio'})}>
                 <Block center middle style={styles.button}>
-                  <ACIcon size={38} />
+                  <AudioIcon size={38} />
                   <Text button style={{marginTop: theme.sizes.base * 0.5}}>
-                    {settings['ac'].name}
+                    {settings['audio'].name}
                   </Text>
                 </Block>
               </TouchableOpacity>
@@ -83,7 +84,7 @@ class Dashboard extends Component {
             <Block
               row
               space="around"
-              style={{marginVertical: theme.sizes.base}}>
+              style={{marginVertical: theme.sizes.base}}> 
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
@@ -106,8 +107,8 @@ class Dashboard extends Component {
                     {settings['fan'].name}
                   </Text>
                 </Block>
-              </TouchableOpacity>
-            </Block>
+              </TouchableOpacity> 
+             </Block> 
           </Block>
         </ScrollView>
       </Block>
