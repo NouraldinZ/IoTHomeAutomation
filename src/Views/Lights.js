@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TouchableWithoutFeedback, Slider, View, Pressable} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, Slider, View, Pressable, Dimensions} from 'react-native';
 import { Switch } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -10,7 +10,15 @@ import {
   SliderHuePicker,
 } from 'react-native-slider-color-picker';
 import * as lightsApi from '../API/lightsApi';
-import firebase from "../firebase";
+import { LinearGradient } from 'expo-linear-gradient';
+import * as common from "../API/common";
+import {app_settings, INTERVAL} from "../app_settings";
+
+export let intervalId_processNewState = undefined;
+
+export const stopLightsStateUpdate = function (){
+	clearInterval(intervalId_processNewState);
+}
 
 class Lights extends Component {
   static navigationOptions = {
@@ -38,6 +46,23 @@ class Lights extends Component {
   	color: {red: 255, blue: 0, green: 0},
   };
 
+  async processNewState () {
+	intervalId_processNewState = setInterval(function() {
+	  let state = app_settings.state;
+	  console.log("Lights - Updating State");
+	  if (state) {
+		//console.log("state", state);
+		this.setState({
+		  lightsOn: state.lightsOn,
+		  brightness: state.brightness,
+		  rgbMode: state.rgbMode,
+		  color: state.color,
+		});
+
+	  }
+	}, INTERVAL);
+  }
+
   renderController() {
 	return (
 	  <Block flex={1} right style={styles.controller}>
@@ -51,8 +76,8 @@ class Lights extends Component {
 
   toggleLight = () => {
 	console.log("LIGHTS:", !this.state.lightsOn);
-	console.log(this.state.brightness);
-	console.log(this.state.color);
+	//console.log(this.state.brightness);
+	//console.log(this.state.color);
 	let lightState = this.state.lightsOn;
 	let brightnessState = this.state.brightness;
 	let rgbModeState = this.state.rgbMode;
@@ -131,7 +156,12 @@ class Lights extends Component {
 	const {navigation, settings} = this.props;
 	const name = navigation.getParam('name');
 	const Icon = settings[name].icon;
-
+  	console.log(navigation.state.routeName === 'Lights');
+  	if (!app_settings.backgroundFetchTask.lights_initialized) {
+	  console.log("Initialized Lights Fetch");
+	  this.processNewState().then(r => {});
+	  app_settings.backgroundFetchTask.lights_initialized = true;
+  	}
 	return (
 	  <Block flex={1} style={styles.settings}>
 		<Block flex={1} center>
@@ -179,9 +209,10 @@ class Lights extends Component {
 
 			  <SliderHuePicker
 				enabled={this.state.lightsOn}
-				trackStyle={[{height: 12}]}
+				trackStyle={[{height: 12, width:super.width}]}
 				thumbStyle={styles.thumb}
 				onColorChange={this.changeColor}
+				color={this.state.color}
 			  />
 			</Block>}
 
@@ -236,5 +267,12 @@ const styles = StyleSheet.create({
 	},
 	shadowRadius: 2,
 	shadowOpacity: 0.35,
+  },
+  background: {
+	position: 'absolute',
+	left: 0,
+	right: 0,
+	top: 0,
+	height: Dimensions.get('window').height,
   },
 });

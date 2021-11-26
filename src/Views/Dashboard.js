@@ -7,19 +7,62 @@ import {Block, Text} from '../Components';
 import mocks from '../Theme/settings';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import {app_settings, INTERVAL} from '../app_settings.js';
+import * as common from '../API/common';
+import Lights, {stopLightsStateUpdate} from "./Lights";
+
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    //const settings = require('../app_settings.js');
+    if (!app_settings.backgroundFetchTask.initialized) {
+      this.backgroundFetch().then(r => {});
+      app_settings.backgroundFetchTask.initialized = true;
+    }
+
+  }
+
   static navigationOptions = {
     header: null,
   };
+
+  backgroundFetch = async function () {
+    //stopLightsStateUpdate();
+
+    let intervalId = setInterval(function() {
+      let state = common.fetchState();
+      app_settings.state = state;
+      console.log("Background fetch");
+      //console.log("state", state);
+      //console.log("app_settings", app_settings);
+      //console.log("this:", obj.props);
+      if (state) {
+        app_settings.state = state;
+        //console.log("state", state);
+        //console.log("props", obj.props);
+
+        // TODO: Temperature & Humidity data update
+
+        // TODO: Motion Detected Notification
+
+      }
+      // TODO: Check if still logged in
+      //if (this.props.navigation.state.routeName = 'Login'){
+        //clearInterval(intervalId);
+      //}
+
+    }, INTERVAL);
+  }
+
   render() {
     const {navigation, settings, lights} = this.props;
     const LightIcon = settings['light'].icon;
     const ACIcon = settings['ac'].icon;
     const TempIcon = settings['temperature'].icon;
     const FanIcon = settings['fan'].icon;
-    const WiFiIcon = settings['wi-fi'].icon;
-    const ElectricityIcon = settings['electricity'].icon;
-
+    //const WiFiIcon = settings['wi-fi'].icon;
+    //const ElectricityIcon = settings['electricity'].icon;
     return (
       <LinearGradient style={styles.background} colors={['#fcd6bd', '#72a5ff', '#408dff']} >
       <Block style={styles.dashboard}>
@@ -46,7 +89,6 @@ class Dashboard extends Component {
             />
           </Block>
         </Block>
-
         <ScrollView
           contentContainerStyle={styles.buttons}
           showsVerticalScrollIndicator={false}>

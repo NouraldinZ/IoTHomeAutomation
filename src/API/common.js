@@ -1,9 +1,22 @@
 // Used for fetching state in regular intervals (every 1000ms)
-import * as utils from './utils';
 import * as apiUtils from "./utils";
+
+
+export const fetchState = () => {
+    apiUtils.sendHttpRequest(apiUtils.requestMethods.get, apiUtils.baseUrl+'/state').then(responseData => {
+        console.log("Successfully sent request: 'fetchState'\n",);
+        return responseData;
+    }).catch(err => {
+        console.log("Error Occurred while sending request: 'fetchState'\n", err);
+    });
+    return false;
+};
+
+
 
 /*
 STATE JSON OBJECT
+GET /state
 {
 	// Lights Module State
 	"lightsOn": boolean,
@@ -23,12 +36,3 @@ STATE JSON OBJECT
 	// ...
 }
 */
-
-export const fetchState = () => {
-    apiUtils.sendHttpRequest(apiUtils.requestMethods.get, apiUtils.baseUrl+'/status').then(responseData => {
-        console.log("Successfully sent request: 'fetchStatus'\nRESPONSE:\n", responseData);
-    }).catch(err => {
-        console.log("Error Occurred while sending request: 'fetchStatus'\n", err);
-    });
-}
-
