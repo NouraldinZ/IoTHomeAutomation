@@ -1,5 +1,5 @@
 
-export const baseUrl = 'http://localhost:19002'; //TODO: update baseUrl to flask server
+export const baseUrl = 'http://192.168.0.20:5000'; //TODO: update baseUrl to flask server
 
 export const requestMethods = {
     get: 'GET',
