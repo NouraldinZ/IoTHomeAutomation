@@ -10,8 +10,10 @@ export const toggleLights = (lights, brightness, mode, rgb) => {
         color: rgb,
     }).then(responseData => {
         console.log("Successfully sent request: 'toggleLights'\nRESPONSE:\n", responseData);
+        return true;
     }).catch(err => {
         console.log("Error Occurred while sending request: 'toggleLights'\n", err);
+        return false;
     });
 }
 
@@ -23,8 +25,10 @@ export const toggleRgbMode = (mode, rgb) => {
         //brightness: mode?9:state.brightness,
     }).then(responseData => {
         console.log("Successfully sent request: 'toggleRgbMode'\nRESPONSE:\n", responseData);
+        return true;
     }).catch(err => {
         console.log("Error Occurred while sending request: 'toggleRgbMode'\n", err);
+        return false;
     });
 }
 
@@ -35,8 +39,10 @@ export const changeBrightness = (brightness) => {
         //lightsOn: brightness>0? true:false,
     }).then(responseData => {
         console.log("Successfully sent request: 'changeBrightness'\nRESPONSE:\n", responseData);
+        return true;
     }).catch(err => {
         console.log("Error Occurred while sending request: 'changeBrightness'\n", err);
+        return false;
     });
 }
 
@@ -47,7 +53,9 @@ export const changeColor = (rgb) => {
         //brightness: 9,
     }).then(responseData => {
         console.log("Successfully sent request: 'changeColor'\nRESPONSE:\n", responseData);
+        return true;
     }).catch(err => {
         console.log("Error Occurred while sending request: 'changeColor'\n", err);
+        return false;
     });
 }

@@ -13,6 +13,7 @@ import * as lightsApi from '../API/lightsApi';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as common from "../API/common";
 import {app_settings, INTERVAL} from "../app_settings";
+import Toast from "react-native-root-toast";
 
 export let intervalId_processNewState = undefined;
 
@@ -21,46 +22,30 @@ export const stopLightsStateUpdate = function (){
 }
 
 class Lights extends Component {
-  static navigationOptions = {
-	headerLeft: ({onPress}) => (
-	  <TouchableWithoutFeedback onPress={() => onPress()}>
-		<FontAwesome
-		  size={theme.sizes.font * 1.5}
-		  color={theme.colors.black}
-		  name="arrow-left"
-		/>
-	  </TouchableWithoutFeedback>
-	),
-	headerLeftContainerStyle: {
-	  paddingLeft: theme.sizes.base * 2,
-	},
-	headerStyle: {
-	  borderBottomColor: 'transparent',
-	},
-  };
-
   state = {
-	lightsOn: true,
-	brightness: 5,
+	lightsOn: false,
+	brightness: 0,
 	rgbMode: false,
   	color: {red: 255, blue: 0, green: 0},
   };
 
-  async processNewState () {
-	intervalId_processNewState = setInterval(function() {
+	processNewState = () =>{
 	  let state = app_settings.state;
 	  console.log("Lights - Updating State");
 	  if (state) {
-		//console.log("state", state);
-		this.setState({
-		  lightsOn: state.lightsOn,
-		  brightness: state.brightness,
-		  rgbMode: state.rgbMode,
-		  color: state.color,
-		});
+		  //console.log("state", state);
+		  this.setState({
+			  lightsOn: state.lightsOn,
+			  brightness: state.brightness,
+			  rgbMode: state.rgbMode,
+			  color: state.color,
+		  });
 
 	  }
-	}, INTERVAL);
+  };
+
+  async triggerLightsBackgroundFetch() {
+	intervalId_processNewState = setInterval(this.processNewState, INTERVAL);
   }
 
   renderController() {
@@ -75,55 +60,79 @@ class Lights extends Component {
   }
 
   toggleLight = () => {
-	console.log("LIGHTS:", !this.state.lightsOn);
 	//console.log(this.state.brightness);
 	//console.log(this.state.color);
 	let lightState = this.state.lightsOn;
 	let brightnessState = this.state.brightness;
 	let rgbModeState = this.state.rgbMode;
-	this.setState(state => ({
+	// Send request to Raspberry-Pi to toggle lights switch
+  	let result = lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
+		rgbModeState, this.state.color);
+  	if(result){
+	  console.log("LIGHTS:", !this.state.lightsOn);
+	  this.setState(state => ({
 		lightsOn: !state.lightsOn,
 		brightness: (!state.lightsOn ? (state.rgbMode ? 9 : (state.brightness > 0 ? state.brightness : 1)) : 0),
 		color: {red: 255, blue: 0, green: 0},
-	}));
-	// Send request to Raspberry-Pi to toggle lights switch
-  	lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
-		rgbModeState, this.state.color);
+	  }));
+	} else {
+	  Toast.show('Unable to execute! Check Network!', {
+		duration: Toast.durations.SHORT,
+	  });
+	}
   }
 
   updateBrightness = (value) => {
 	//console.log(!this.state.lightsOn);
 	//console.log(this.state.brightness);
-  	console.log("BRIGHTNESS:", value);
-
-	this.setState(() => ({
-	  brightness: value,
-	  lightsOn: value>0? true:false,
-	}));
-	// TODO: Send request to Raspberry-Pi
-	lightsApi.changeBrightness(value);
+	//Send request to Raspberry-Pi
+	let result = lightsApi.changeBrightness(value);
+	if(result) {
+	  console.log("BRIGHTNESS:", value);
+	  this.setState(() => ({
+		brightness: value,
+		lightsOn: value>0? true:false,
+	  }));
+	} else {
+	  Toast.show('Unable to execute! Check Network!', {
+	    duration: Toast.durations.SHORT,
+	  });
+	}
   }
 
   changeMode = (mode) => {
-  	console.log("RGB MODE:", mode);
-  	this.setState(state => ({
-	  rgbMode: mode,
-	  brightness: mode?9:state.brightness,
-	}));
-    // TODO: Send request to Raspberry-Pi
-  	lightsApi.toggleRgbMode(mode, this.state.color);
+    //Send request to Raspberry-Pi
+  	let result = lightsApi.toggleRgbMode(mode, this.state.color);
+    if(result) {
+	  console.log("RGB MODE:", mode);
+	  this.setState(state => ({
+		rgbMode: mode,
+		brightness: mode?9:state.brightness,
+	  }));
+	} else {
+	  Toast.show('Unable to execute! Check Network!', {
+	    duration: Toast.durations.SHORT,
+	  });
+	}
   }
 
   changeColor = (colorHsvOrRgb, resType) => {
 	if (resType == "end") {
 		//console.log(colorHsvOrRgb.h);
 		let rgb = this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1);
-		this.setState({
-			color: rgb,
-		});
 		console.log("RGB COLOR:", rgb);
-		// TODO: Send request to Raspberry-Pi
-		lightsApi.changeColor(rgb);
+		//Send request to Raspberry-Pi
+		let result = lightsApi.changeColor(rgb);
+		if(result) {
+			console.log("RGB COLOR:", rgb);
+			this.setState({
+				color: rgb,
+			});
+		} else {
+			Toast.show('Unable to execute! Check Network!', {
+				duration: Toast.durations.SHORT,
+			});
+		}
 	}
   }
 
@@ -159,7 +168,7 @@ class Lights extends Component {
   	console.log(navigation.state.routeName === 'Lights');
   	if (!app_settings.backgroundFetchTask.lights_initialized) {
 	  console.log("Initialized Lights Fetch");
-	  this.processNewState().then(r => {});
+	  this.triggerLightsBackgroundFetch().then(r => {});
 	  app_settings.backgroundFetchTask.lights_initialized = true;
   	}
 	return (
@@ -221,6 +230,23 @@ class Lights extends Component {
 	  </Block>
 	);
   }
+  static navigationOptions = {
+	  /*headerLeft: ({onPress}) => (
+		<TouchableWithoutFeedback onPress={() => onPress()}>
+		  <FontAwesome
+			size={theme.sizes.font * 1.5}
+			color={theme.colors.black}
+			name="arrow-left"
+		  />
+		</TouchableWithoutFeedback>
+	  ),
+	  headerLeftContainerStyle: {
+		paddingLeft: theme.sizes.base * 2,
+	  },*/
+	  headerStyle: {
+		borderBottomColor: 'transparent',
+	  },
+  };
 }
 
 /* above return statement (colorpicker)

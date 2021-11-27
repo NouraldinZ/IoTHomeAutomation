@@ -11,6 +11,8 @@ import {app_settings, INTERVAL} from '../app_settings.js';
 import * as common from '../API/common';
 import Lights, {stopLightsStateUpdate} from "./Lights";
 
+let humidityData = [0, 0, 0, 0, 0];
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -32,19 +34,18 @@ class Dashboard extends Component {
 
     let intervalId = setInterval(function() {
       let state = common.fetchState();
-      app_settings.state = state;
+      //app_settings.state = state;
       console.log("Background fetch");
-      //console.log("state", state);
-      //console.log("app_settings", app_settings);
-      //console.log("this:", obj.props);
       if (state) {
         app_settings.state = state;
-        //console.log("state", state);
-        //console.log("props", obj.props);
 
-        // TODO: Temperature & Humidity data update
-
+        //Humidity data update
+        humidityData.push(app_settings.state.humidity);
+        humidityData.shift();
         // TODO: Motion Detected Notification
+        if(app_settings.state.motionDetected){
+          //TODO: Display Notification
+        }
 
       }
       // TODO: Check if still logged in
@@ -72,7 +73,7 @@ class Dashboard extends Component {
 
         <Block row>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
-            <Text h1>22</Text>
+            <Text h1>{app_settings.state.temperature.celcius}</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
               °C
             </Text>
@@ -82,7 +83,7 @@ class Dashboard extends Component {
             <LineChart
               yMax={100}
               yMin={0}
-              data={[0, 20, 25, 15, 20, 55, 60]}
+              data={humidityData}
               style={{flex: 0.8}}
               curve={shape.curveNatural}
               svg={{stroke: theme.colors.accent, strokeWidth: 3}}

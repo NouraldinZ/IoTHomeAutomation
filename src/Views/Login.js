@@ -47,7 +47,7 @@ class Login extends Component {
                         username: '',
                     });
                     console.log("LOGIN SUCCESSFUL -", usernameEntered);
-                    navigation.navigate('Dashboard', {username: usernameEntered});
+                    navigation.navigate('Dashboard', {username: usernameEntered, loggedIn:true});
                 } else {
                     console.log("LOGIN FAILED!");
                     Toast.show('Incorrect Username or Password!', {
