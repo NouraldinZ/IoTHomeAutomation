@@ -4,9 +4,10 @@ import {StyleSheet, View, Pressable} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as theme from '../Theme/theme';
 import {Block, Text} from '../Components';
+import * as audioApi from '../API/audioApi';
 
 function onPressFunction(){
-    console.log("Button Pressed")
+    audioApi.makeBluetoothDiscoverable();
 }
 
 class Audio extends Component {
