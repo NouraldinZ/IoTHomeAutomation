@@ -23,7 +23,7 @@ export const stopLightsStateUpdate = function (){
 
 class Lights extends Component {
   state = {
-	lightsOn: false,
+	lightsOn: true,
 	brightness: 0,
 	rgbMode: false,
   	color: {red: 255, blue: 0, green: 0},
@@ -68,7 +68,7 @@ class Lights extends Component {
 	// Send request to Raspberry-Pi to toggle lights switch
   	let result = lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
 		rgbModeState, this.state.color);
-  	if(result){
+  	if(true){
 	  console.log("LIGHTS:", !this.state.lightsOn);
 	  this.setState(state => ({
 		lightsOn: !state.lightsOn,
@@ -103,7 +103,7 @@ class Lights extends Component {
   changeMode = (mode) => {
     //Send request to Raspberry-Pi
   	let result = lightsApi.toggleRgbMode(mode, this.state.color);
-    if(result) {
+    if(true) {
 	  console.log("RGB MODE:", mode);
 	  this.setState(state => ({
 		rgbMode: mode,
@@ -123,7 +123,7 @@ class Lights extends Component {
 		console.log("RGB COLOR:", rgb);
 		//Send request to Raspberry-Pi
 		let result = lightsApi.changeColor(rgb);
-		if(result) {
+		if(true) {
 			console.log("RGB COLOR:", rgb);
 			this.setState({
 				color: rgb,

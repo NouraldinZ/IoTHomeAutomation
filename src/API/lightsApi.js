@@ -2,7 +2,7 @@
 import * as apiUtils from './utils';
 
 // Toggle Lights on/off
-export const toggleLights = (lights, brightness, mode, rgb) => {
+export let toggleLights = (lights, brightness, mode, rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/power', {//TODO: update baseUrl to flask server
         lights : lights,
         brightness: (!lights? (brightness > 0 ? brightness : 1) : 0),
@@ -18,7 +18,7 @@ export const toggleLights = (lights, brightness, mode, rgb) => {
 }
 
 // Toggle RGB mode on/off
-export const toggleRgbMode = (mode, rgb) => {
+export let toggleRgbMode = (mode, rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/mode', {//TODO: update baseUrl to flask server
         rgbMode: mode,
         color: rgb,
@@ -33,7 +33,7 @@ export const toggleRgbMode = (mode, rgb) => {
 }
 
 // Change Brightness
-export const changeBrightness = (brightness) => {
+export let changeBrightness = (brightness) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/brightness', { //TODO: update baseUrl to flask server
         brightness: brightness,
         //lightsOn: brightness>0? true:false,
@@ -47,7 +47,7 @@ export const changeBrightness = (brightness) => {
 }
 
 // Change color
-export const changeColor = (rgb) => {
+export let changeColor = (rgb) => {
     apiUtils.sendHttpRequest(apiUtils.requestMethods.post, apiUtils.baseUrl+'/smartLight/color', {//TODO: update baseUrl to flask server
         color: rgb,
         //brightness: 9,

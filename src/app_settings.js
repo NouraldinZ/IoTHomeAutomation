@@ -1,5 +1,5 @@
 
-export const INTERVAL = 5000;
+export const INTERVAL = 15000;
 
 export let app_settings = {
   backgroundFetchTask: {
@@ -8,7 +8,7 @@ export let app_settings = {
   },
   state: {
     // Lights Module State
-    "lightsOn": false,
+    "lightsOn": true,
     "brightness": 0,
     "rgbMode": false,
     "color": { red: 255, blue: 0, green: 0 },
