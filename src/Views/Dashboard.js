@@ -7,7 +7,7 @@ import {Block, Text} from '../Components';
 import mocks from '../Theme/settings';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import {app_settings, INTERVAL} from '../app_settings.js';
+import {INTERVAL} from '../app_settings.js';
 import * as common from '../API/common';
 import Lights, {stopLightsStateUpdate} from "./Lights";
 
@@ -16,45 +16,96 @@ let humidityData = [0, 0, 0, 0, 0];
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    //const settings = require('../app_settings.js');
-    if (!app_settings.backgroundFetchTask.initialized) {
-      this.backgroundFetch().then(r => {});
-      app_settings.backgroundFetchTask.initialized = true;
-    }
+    this.state = {
+      temperature:{
+        celcius:20,
+        farenheit: 70
+      },
+      humidity:0,
+      humidityData:[0, 0, 0, 0, 0],
+    };
 
+    if (!Dashboard.app_settings.backgroundFetchTask.initialized) {
+      this.backgroundFetch().then(r => {});
+      Dashboard.app_settings.backgroundFetchTask.initialized = true;
+    }
   }
+
+  static app_settings = {
+    backgroundFetchTask: {
+      initialized: false,
+      lights_initialized:false,
+    },
+    state: {
+      // Lights Module State
+      "lightsOn": true,
+      "brightness": 0,
+      "rgbMode": false,
+      "color": { red: 255, blue: 0, green: 0 },
+
+      // Motion Sensor Module State
+      "motionDetected": false,
+      "timestamp": 'defaultTimestamp',
+
+      // Temperature & Humidity Module
+      "temperature": { celcius: 22, farenheit: 73 },
+      "humidity":10,
+      //"date": Date,
+
+      // Bluetooth Module
+      // ...
+    },
+  };
 
   static navigationOptions = {
     header: null,
   };
 
-  backgroundFetch = async function () {
-    //stopLightsStateUpdate();
-
-    let intervalId = setInterval(function() {
-      let state = common.fetchState();
+  backgroundProcess = () => {
+    common.fetchState().then(response => {
       //app_settings.state = state;
-      console.log("Background fetch");
-      if (state) {
-        app_settings.state = state;
+      if(response) {
+        // Test Code
+        /*console.log(response);
+        Dashboard.app_settings.state.temperature.celcius += 1;
+        Dashboard.app_settings.state.humidity +=1;
+        Dashboard.app_settings.state.lightsOn = !Dashboard.app_settings.state.lightsOn;
+        console.log(Dashboard.app_settings.state.temperature.celcius);
+        console.log(humidityData);
+        */
+
+        console.log("Background fetch");
+        Dashboard.app_settings.state = response;//COMMENT THIS LINE IF TESTING BACKGROUND TASK
 
         //Humidity data update
-        humidityData.push(app_settings.state.humidity);
+        humidityData.push(Dashboard.app_settings.state.humidity);
         humidityData.shift();
+
+        // Update Temperature and Humidity state
+        this.setState({
+          temperature:{
+            celcius:Dashboard.app_settings.state.temperature.celcius,
+            farenheit:Dashboard.app_settings.state.temperature.farenheit
+          },
+          humidity:Dashboard.app_settings.state.humidity,
+          humidityData:humidityData,
+        });
+
         // TODO: Motion Detected Notification
-        if(app_settings.state.motionDetected){
-          //TODO: Display Notification
+        if (Dashboard.app_settings.state.motionDetected) {
         }
-
       }
-      // TODO: Check if still logged in
-      //if (this.props.navigation.state.routeName = 'Login'){
-        //clearInterval(intervalId);
-      //}
+    });
+    // TODO: Check if still logged in
+    //if (this.props.navigation.state.routeName = 'Login'){
+    //clearInterval(intervalId);
+    //}
+  };
 
-    }, INTERVAL);
-  }
+  async backgroundFetch(){
+    //stopLightsStateUpdate();
+    let intervalId = setInterval(this.backgroundProcess, INTERVAL);
+  };
 
   render() {
     const {navigation, settings, lights} = this.props;
@@ -73,7 +124,7 @@ class Dashboard extends Component {
 
         <Block row>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
-            <Text h1>{app_settings.state.temperature.celcius}</Text>
+            <Text h1>{this.state.temperature.celcius}</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
               °C
             </Text>
@@ -83,7 +134,7 @@ class Dashboard extends Component {
             <LineChart
               yMax={100}
               yMin={0}
-              data={humidityData}
+              data={this.state.humidityData}
               style={{flex: 0.8}}
               curve={shape.curveNatural}
               svg={{stroke: theme.colors.accent, strokeWidth: 3}}

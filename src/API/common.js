@@ -3,13 +3,14 @@ import * as apiUtils from "./utils";
 
 
 export const fetchState = () => {
-    apiUtils.sendHttpRequest(apiUtils.requestMethods.get, apiUtils.baseUrl+'/state').then(responseData => {
+    const result = apiUtils.sendHttpRequest(apiUtils.requestMethods.get, apiUtils.baseUrl+'/state').then(responseData => {
         console.log("Successfully sent request: 'fetchState'\n",);
         return responseData;
     }).catch(err => {
         console.log("Error Occurred while sending request: 'fetchState'\n", err);
+        return false;
     });
-    return false;
+    return result;
 };
 
 

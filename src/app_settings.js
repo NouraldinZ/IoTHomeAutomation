@@ -1,7 +1,7 @@
 
-export const INTERVAL = 15000;
+export const INTERVAL = 3000;
 
-export let app_settings = {
+/*global.app_settings = {
   backgroundFetchTask: {
     initialized: false,
     lights_initialized:false,
@@ -25,4 +25,4 @@ export let app_settings = {
     // Bluetooth Module
     // ...
   },
-};
+};*/

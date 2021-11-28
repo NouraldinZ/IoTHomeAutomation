@@ -12,8 +12,9 @@ import {
 import * as lightsApi from '../API/lightsApi';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as common from "../API/common";
-import {app_settings, INTERVAL} from "../app_settings";
+import {INTERVAL} from "../app_settings";
 import Toast from "react-native-root-toast";
+import Dashboard from "./Dashboard";
 
 export let intervalId_processNewState = undefined;
 
@@ -30,18 +31,14 @@ class Lights extends Component {
   };
 
 	processNewState = () =>{
-	  let state = app_settings.state;
+	  let state = Dashboard.app_settings.state;
 	  console.log("Lights - Updating State");
-	  if (state) {
-		  //console.log("state", state);
-		  this.setState({
-			  lightsOn: state.lightsOn,
-			  brightness: state.brightness,
-			  rgbMode: state.rgbMode,
-			  color: state.color,
-		  });
-
-	  }
+	  this.setState({
+		  lightsOn: state.lightsOn,
+		  brightness: state.brightness,
+		  rgbMode: state.rgbMode,
+		  color: state.color,
+	  });
   };
 
   async triggerLightsBackgroundFetch() {
@@ -66,20 +63,22 @@ class Lights extends Component {
 	let brightnessState = this.state.brightness;
 	let rgbModeState = this.state.rgbMode;
 	// Send request to Raspberry-Pi to toggle lights switch
-  	let result = lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
-		rgbModeState, this.state.color);
-  	if(true){
-	  console.log("LIGHTS:", !this.state.lightsOn);
-	  this.setState(state => ({
-		lightsOn: !state.lightsOn,
-		brightness: (!state.lightsOn ? (state.rgbMode ? 9 : (state.brightness > 0 ? state.brightness : 1)) : 0),
-		color: {red: 255, blue: 0, green: 0},
-	  }));
-	} else {
-	  Toast.show('Unable to execute! Check Network!', {
-		duration: Toast.durations.SHORT,
-	  });
-	}
+  	lightsApi.toggleLights(!lightState, (!lightState? (rgbModeState? 9:(brightnessState > 0 ? brightnessState : 1)) : 0),
+		rgbModeState, this.state.color).then(result => {
+	  if(result) {
+		  console.log("LIGHTS:", !this.state.lightsOn);
+		  this.setState(state => ({
+			  lightsOn: !state.lightsOn,
+			  brightness: (!state.lightsOn ? (state.rgbMode ? 9 : (state.brightness > 0 ? state.brightness : 1)) : 0),
+			  color: {red: 255, blue: 0, green: 0},
+		  }));
+	  } else {
+		  Toast.show('Unable to execute! Check Network!', {
+			  duration: Toast.durations.SHORT,
+		  });
+	  }
+	})
+
   }
 
   updateBrightness = (value) => {
@@ -103,7 +102,7 @@ class Lights extends Component {
   changeMode = (mode) => {
     //Send request to Raspberry-Pi
   	let result = lightsApi.toggleRgbMode(mode, this.state.color);
-    if(true) {
+    if(result) {
 	  console.log("RGB MODE:", mode);
 	  this.setState(state => ({
 		rgbMode: mode,
@@ -123,7 +122,7 @@ class Lights extends Component {
 		console.log("RGB COLOR:", rgb);
 		//Send request to Raspberry-Pi
 		let result = lightsApi.changeColor(rgb);
-		if(true) {
+		if(result) {
 			console.log("RGB COLOR:", rgb);
 			this.setState({
 				color: rgb,
@@ -166,10 +165,10 @@ class Lights extends Component {
 	const name = navigation.getParam('name');
 	const Icon = settings[name].icon;
   	console.log(navigation.state.routeName === 'Lights');
-  	if (!app_settings.backgroundFetchTask.lights_initialized) {
+  	if (!Dashboard.app_settings.backgroundFetchTask.lights_initialized) {
 	  console.log("Initialized Lights Fetch");
 	  this.triggerLightsBackgroundFetch().then(r => {});
-	  app_settings.backgroundFetchTask.lights_initialized = true;
+	  Dashboard.app_settings.backgroundFetchTask.lights_initialized = true;
   	}
 	return (
 	  <Block flex={1} style={styles.settings}>
