@@ -57,8 +57,10 @@ class Lights extends Component {
   }
 
   toggleLight = () => {
+    // TEST CODE
 	//console.log(this.state.brightness);
 	//console.log(this.state.color);
+
 	let lightState = this.state.lightsOn;
 	let brightnessState = this.state.brightness;
 	let rgbModeState = this.state.rgbMode;
@@ -77,61 +79,67 @@ class Lights extends Component {
 			  duration: Toast.durations.SHORT,
 		  });
 	  }
-	})
+	});
 
   }
 
   updateBrightness = (value) => {
+    // TEST CODE
 	//console.log(!this.state.lightsOn);
 	//console.log(this.state.brightness);
+
 	//Send request to Raspberry-Pi
-	let result = lightsApi.changeBrightness(value);
-	if(result) {
-	  console.log("BRIGHTNESS:", value);
-	  this.setState(() => ({
-		brightness: value,
-		lightsOn: value>0? true:false,
-	  }));
-	} else {
-	  Toast.show('Unable to execute! Check Network!', {
-	    duration: Toast.durations.SHORT,
-	  });
-	}
-  }
-
-  changeMode = (mode) => {
-    //Send request to Raspberry-Pi
-  	let result = lightsApi.toggleRgbMode(mode, this.state.color);
-    if(result) {
-	  console.log("RGB MODE:", mode);
-	  this.setState(state => ({
-		rgbMode: mode,
-		brightness: mode?9:state.brightness,
-	  }));
-	} else {
-	  Toast.show('Unable to execute! Check Network!', {
-	    duration: Toast.durations.SHORT,
-	  });
-	}
-  }
-
-  changeColor = (colorHsvOrRgb, resType) => {
-	if (resType == "end") {
-		//console.log(colorHsvOrRgb.h);
-		let rgb = this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1);
-		console.log("RGB COLOR:", rgb);
-		//Send request to Raspberry-Pi
-		let result = lightsApi.changeColor(rgb);
+	lightsApi.changeBrightness(value).then(result => {
 		if(result) {
-			console.log("RGB COLOR:", rgb);
-			this.setState({
-				color: rgb,
-			});
+			console.log("BRIGHTNESS:", value);
+			this.setState(() => ({
+				brightness: value,
+				lightsOn: value>0? true:false,
+			}));
 		} else {
 			Toast.show('Unable to execute! Check Network!', {
 				duration: Toast.durations.SHORT,
 			});
 		}
+	});
+
+  }
+
+  changeMode = (mode) => {
+    //Send request to Raspberry-Pi
+  	lightsApi.toggleRgbMode(mode, this.state.color).then(result => {
+		if (result) {
+			console.log("RGB MODE:", mode);
+			this.setState(state => ({
+				rgbMode: mode,
+				brightness: mode ? 9 : state.brightness,
+			}));
+		} else {
+			Toast.show('Unable to execute! Check Network!', {
+				duration: Toast.durations.SHORT,
+			});
+		}
+	});
+  }
+
+  changeColor = (colorHsvOrRgb, resType) => {
+	if (resType === "end") {
+		//console.log(colorHsvOrRgb.h); // TEST CODE
+		let rgb = this.HSVtoRGB(colorHsvOrRgb.h/360, 1, 1);
+		console.log("RGB COLOR:", rgb);
+		//Send request to Raspberry-Pi
+		lightsApi.changeColor(rgb).then(result => {
+			if (result) {
+				console.log("RGB COLOR:", rgb);
+				this.setState({
+					color: rgb,
+				});
+			} else {
+				Toast.show('Unable to execute! Check Network!', {
+					duration: Toast.durations.SHORT,
+				});
+			}
+		});
 	}
   }
 
@@ -247,17 +255,6 @@ class Lights extends Component {
 	  },
   };
 }
-
-/* above return statement (colorpicker)
-return (
-	  <Block flex={1} style={styles.settings}>
-		<ColorPicker
-		  onColorSelected={color => alert(`Color selected: ${color}`)}
-		  style={{flex: 1}}
-		/>
-	  </Block>
-	);
-	*/
 
 Lights.defaultProps = {
   settings: mocks,
