@@ -23,10 +23,10 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       temperature:{
-        celcius:20,
+        celsius:20,
         farenheit: 70
       },
-      temperature_celcius:20,
+      temperature_celsius:20,
       temperature_farenheit:70,
       humidity:0,
       humidityData:[20, 40, 30, 50, 70],
@@ -61,8 +61,8 @@ class Dashboard extends Component {
       "timestamp": 'defaultTimestamp',
 
       // Temperature & Humidity Module
-      "temperature": { celcius: 22, farenheit: 73 },
-      "temperature_celcius":22,
+      "temperature": { celsius: 22, farenheit: 73 },
+      "temperature_celsius":22,
       "temperature_farenheit": 73,
       "humidity":10,
       //"date": Date,
@@ -83,10 +83,10 @@ class Dashboard extends Component {
       if(response) {
         // Test Code
         /*console.log(response);
-        Dashboard.app_settings.state.temperature.celcius += 1;
+        Dashboard.app_settings.state.temperature.celsius += 1;
         Dashboard.app_settings.state.humidity +=1;
         Dashboard.app_settings.state.lightsOn = !Dashboard.app_settings.state.lightsOn;
-        console.log(Dashboard.app_settings.state.temperature.celcius);
+        console.log(Dashboard.app_settings.state.temperature.celsius);
         console.log(humidityData);
         */
 
@@ -100,10 +100,10 @@ class Dashboard extends Component {
         // Update Temperature and Humidity state
         this.setState({
           temperature:{
-            celcius:Dashboard.app_settings.state.temperature.celcius,
+            celsius:Dashboard.app_settings.state.temperature.celsius,
             farenheit:Dashboard.app_settings.state.temperature.farenheit
           },
-          temperature_celcius:Dashboard.app_settings.state.temperature.celcius,
+          temperature_celsius:Dashboard.app_settings.state.temperature.celsius,
           temperature_farenheit:Dashboard.app_settings.state.temperature.farenheit,
           humidity:Dashboard.app_settings.state.humidity,
           humidityData:humidityData,
@@ -151,7 +151,7 @@ class Dashboard extends Component {
 
         <Block row>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
-            <Text h1>{this.state.temperature_celcius}</Text>
+            <Text h1>{this.state.temperature_celsius}</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
               °C
             </Text>

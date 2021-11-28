@@ -30,7 +30,7 @@ GET /state
 	"timestamp": Date,
 
 	// Temperature & Humidity Module
-	"temperature": { celcius: number, farenheit: number },
+	"temperature": { celsius: number, farenheit: number },
 	//"date": Date,
 
 	// Bluetooth Module

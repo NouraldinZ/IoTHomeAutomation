@@ -18,7 +18,7 @@ export const INTERVAL = 3000;
     "timestamp": 'defaultTimestamp',
 
     // Temperature & Humidity Module
-    "temperature": { celcius: 22, farenheit: 73 },
+    "temperature": { celsius: 22, farenheit: 73 },
     "humidity":10,
     //"date": Date,
 
