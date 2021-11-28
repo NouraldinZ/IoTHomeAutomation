@@ -11,7 +11,7 @@ import {INTERVAL} from '../app_settings.js';
 import * as common from '../API/common';
 import Lights, {stopLightsStateUpdate} from "./Lights";
 
-let humidityData = [0, 0, 0, 0, 0];
+let humidityData = [0,0,0,0,0];
 
 class Dashboard extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ class Dashboard extends Component {
         farenheit: 70
       },
       humidity:0,
-      humidityData:[0, 0, 0, 0, 0],
+      humidityData:[20, 40, 30, 50, 70],
     };
 
     if (!Dashboard.app_settings.backgroundFetchTask.initialized) {
@@ -130,7 +130,7 @@ class Dashboard extends Component {
             </Text>
           </Block>
           <Block flex={1} column>
-            <Text name color={'grey'} size={18} >Humidity</Text>
+            <Text name color={'grey'} size={18} >Humidity:   {this.state.humidity} %</Text>
             <LineChart
               yMax={100}
               yMin={0}
@@ -147,9 +147,10 @@ class Dashboard extends Component {
           >
           <Block column space="between">
             <Block
-              row
+              column
               space="around"
-              style={{marginVertical: theme.sizes.base}}>
+              center
+              style={{marginVertical: theme.sizes.base*3}}>
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() =>
@@ -162,7 +163,12 @@ class Dashboard extends Component {
                   </Text>
                 </Block>
               </TouchableOpacity>
-
+            </Block>
+            <Block
+                column
+                space="around"
+                center
+                style={{}}>
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => navigation.navigate('Audio', {name: 'audio'})}>
@@ -174,35 +180,6 @@ class Dashboard extends Component {
                 </Block>
               </TouchableOpacity>
             </Block>
-
-            <Block
-              row
-              space="around"
-              style={{marginVertical: theme.sizes.base}}> 
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() =>
-                  navigation.navigate('Settings', {name: 'temperature'})
-                }>
-                <Block center middle style={styles.button}>
-                  <TempIcon size={38} />
-                  <Text button style={{marginTop: theme.sizes.base * 0.5}}>
-                    {settings['temperature'].name}
-                  </Text>
-                </Block>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => navigation.push('Settings', {name: 'fan'})}>
-                <Block center middle style={styles.button}>
-                  <FanIcon size={38} />
-                  <Text button style={{marginTop: theme.sizes.base * 0.5}}>
-                    {settings['fan'].name}
-                  </Text>
-                </Block>
-              </TouchableOpacity> 
-             </Block> 
           </Block>
         </ScrollView>
       </Block>
@@ -230,9 +207,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: theme.colors.button,
-    width: 151,
-    height: 151,
-    borderRadius: 151 / 2,
+    width: Dimensions.get('window').width*0.75,
+    height: 125,
+    borderRadius: 75 / 2,
   },
   background: {
     position: 'absolute',
