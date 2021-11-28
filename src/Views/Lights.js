@@ -29,19 +29,25 @@ class Lights extends Component {
 	rgbMode: false,
   	color: {red: 255, blue: 0, green: 0},
   };
+  componentWillUnmount() {
+    console.log("Stopped Lights State Update...")
+    Dashboard.app_settings.backgroundFetchTask.lights_initialized = false;
+	stopLightsStateUpdate();
+  }
 
-	processNewState = () =>{
-	  let state = Dashboard.app_settings.state;
-	  console.log("Lights - Updating State");
-	  this.setState({
-		  lightsOn: state.lightsOn,
-		  brightness: state.brightness,
-		  rgbMode: state.rgbMode,
-		  color: state.color,
-	  });
+  processNewState = () =>{
+    let state = Dashboard.app_settings.state;
+    console.log("Lights - Updating State");
+    this.setState({
+	  lightsOn: state.lightsOn,
+	  brightness: state.brightness,
+	  rgbMode: state.rgbMode,
+	  color: state.color,
+    });
   };
 
   async triggerLightsBackgroundFetch() {
+  	this.processNewState();
 	intervalId_processNewState = setInterval(this.processNewState, INTERVAL);
   }
 

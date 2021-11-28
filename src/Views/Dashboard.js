@@ -9,9 +9,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import {INTERVAL} from '../app_settings.js';
 import * as common from '../API/common';
-import Lights, {stopLightsStateUpdate} from "./Lights";
+import Lights, {intervalId_processNewState, stopLightsStateUpdate} from "./Lights";
 
 let humidityData = [0,0,0,0,0];
+export let intervalId_backgroundProcess = undefined;
+export const stopStateFetch = function (){
+  clearInterval(intervalId_backgroundProcess);
+}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -26,9 +30,14 @@ class Dashboard extends Component {
     };
 
     if (!Dashboard.app_settings.backgroundFetchTask.initialized) {
-      this.backgroundFetch().then(r => {});
+      this.triggerBackgroundFetch().then(r => {});
       Dashboard.app_settings.backgroundFetchTask.initialized = true;
     }
+  }
+  componentWillUnmount() {
+    console.log("Stopped State Fetch...")
+    Dashboard.app_settings.backgroundFetchTask.initialized = false;
+    stopStateFetch();
   }
 
   static app_settings = {
@@ -96,15 +105,20 @@ class Dashboard extends Component {
         }
       }
     });
-    // TODO: Check if still logged in
-    //if (this.props.navigation.state.routeName = 'Login'){
-    //clearInterval(intervalId);
-    //}
+    // Check if still logged in
+    /*if (this.props.navigation.state.routeName === 'Login' && Dashboard.app_settings.backgroundFetchTask.initialized){
+
+    }
+    if (this.props.navigation.state.routeName !== 'Lights' && Dashboard.app_settings.backgroundFetchTask.lights_initialized){
+      console.log("Stopped Lights State Update...")
+      Dashboard.app_settings.backgroundFetchTask.lights_initialized = false;
+      stopLightsStateUpdate();
+    }*/
   };
 
-  async backgroundFetch(){
-    //stopLightsStateUpdate();
-    let intervalId = setInterval(this.backgroundProcess, INTERVAL);
+  async triggerBackgroundFetch(){
+    this.backgroundProcess();
+    intervalId_backgroundProcess =  setInterval(this.backgroundProcess, INTERVAL);
   };
 
   render() {
