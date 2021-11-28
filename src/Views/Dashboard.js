@@ -26,6 +26,8 @@ class Dashboard extends Component {
         celcius:20,
         farenheit: 70
       },
+      temperature_celcius:20,
+      temperature_farenheit:70,
       humidity:0,
       humidityData:[20, 40, 30, 50, 70],
     };
@@ -35,6 +37,7 @@ class Dashboard extends Component {
       Dashboard.app_settings.backgroundFetchTask.initialized = true;
     }
   }
+
   componentWillUnmount() {
     console.log("Stopped State Fetch...")
     Dashboard.app_settings.backgroundFetchTask.initialized = false;
@@ -59,6 +62,8 @@ class Dashboard extends Component {
 
       // Temperature & Humidity Module
       "temperature": { celcius: 22, farenheit: 73 },
+      "temperature_celcius":22,
+      "temperature_farenheit": 73,
       "humidity":10,
       //"date": Date,
 
@@ -72,6 +77,7 @@ class Dashboard extends Component {
   };
 
   backgroundProcess = () => {
+    console.log("Background Fetch Update");
     common.fetchState().then(response => {
       //app_settings.state = state;
       if(response) {
@@ -97,6 +103,8 @@ class Dashboard extends Component {
             celcius:Dashboard.app_settings.state.temperature.celcius,
             farenheit:Dashboard.app_settings.state.temperature.farenheit
           },
+          temperature_celcius:Dashboard.app_settings.state.temperature.celcius,
+          temperature_farenheit:Dashboard.app_settings.state.temperature.farenheit,
           humidity:Dashboard.app_settings.state.humidity,
           humidityData:humidityData,
         });
@@ -143,7 +151,7 @@ class Dashboard extends Component {
 
         <Block row>
           <Block flex={1.5} row style={{alignItems: 'flex-end'}}>
-            <Text h1>{this.state.temperature.celcius}</Text>
+            <Text h1>{this.state.temperature_celcius}</Text>
             <Text h1 size={34} height={80} weight="600" spacing={0.1}>
               °C
             </Text>
