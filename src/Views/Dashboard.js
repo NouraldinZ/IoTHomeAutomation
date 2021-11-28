@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {INTERVAL} from '../app_settings.js';
 import * as common from '../API/common';
 import Lights, {intervalId_processNewState, stopLightsStateUpdate} from "./Lights";
+import Toast from "react-native-root-toast";
 
 let humidityData = [0,0,0,0,0];
 export let intervalId_backgroundProcess = undefined;
@@ -100,8 +101,12 @@ class Dashboard extends Component {
           humidityData:humidityData,
         });
 
-        // TODO: Motion Detected Notification
+        // TODO: Notification when Motion Detected
         if (Dashboard.app_settings.state.motionDetected) {
+          Toast.show('Motion Detected!', {  // TODO: Add Timestamp to msg
+            duration: Toast.durations.LONG,
+          });
+          Dashboard.app_settings.state.motionDetected = false;
         }
       }
     });
