@@ -1,0 +1,56 @@
+## here, we will store all commands used to control Home Automation System
+## SMART LIGHT COMMANDS
+Set Colour Red ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 0 0
+Set Colour Green ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 0 255 0
+Set Colour Blue ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 0 0 255
+Set Colour Yellow ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 255 0
+Set Colour Orange ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 165 0
+Set Colour White ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 255 255
+Set Colour Pink ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 192 203
+Set Colour Purple ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 128 0 128
+Set Colour Aqua ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 0 255 255
+Set Colour Teal ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 0 128 128
+Set Colour Navy ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 0 0 128
+Set Colour Olive ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 128 128 0
+Set Colour Magenta ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 255 0 255
+Set Colour Sky Blue ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 135 206 235
+Set Colour Maroon ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 128 0 0
+Set Colour Dark Red ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 139 0 0
+Set Colour Khaki ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 240 230 140
+Set Colour Forest Green ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 34 139 34
+Set Colour Midnight Blue ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 25 25 112
+Set Colour Plum ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColor 221 160 221
+Increase Brightness ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py increaseBrightness
+Decrease Brightness ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py decreaseBrightness
+Increase Temperature ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py increaseTemperature
+Decrease Temperature ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py decreaseTemperature
+Turn Light On ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py turnOn
+Turn Light Off ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py turnOff
+Set Brightness to Level Zero ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 0
+Set Brightness to Level One ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 1
+Set Brightness to Level Two ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 2
+Set Brightness to Level Three ***** python3 ~/smart_light/BeewiPy/bulbcontrol.py setBrightness 3
+Set Brightness to Level Four ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 4
+Set Brightness to Level Five ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 5
+Set Brightness to Level Six ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 6
+Set Brightness to Level Seven ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 7
+Set Brightness to Level Eight ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 8
+Set Brightness to Level Nine ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setBrightness 9
+Set Temperature to Level Zero ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 0
+Set Temperature to Level One ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 1
+Set Temperature to Level Two ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 2
+Set Temperature to Level Three ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 3
+Set Temperature to Level Four ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 4
+Set Temperature to Level Five ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 5
+Set Temperature to Level Six ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 6
+Set Temperature to Level Seven ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 7
+Set Temperature to Level Eight ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 8
+Set Temperature to Level Nine ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setTemperature 9
+Set Colour Interval Slow ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColorSequence 1
+Set Colour Interval Fast ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py setColorSequence 0
+Get Bulb Brightness ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py getBrightness
+Get Bulb Temperature ***** python3 /home/pi/smart_light/BeewiPy/bulbcontrol.py getTemperature
+## TEMPERATURE AND HUMIDITY SENSOR COMMANDS
+Get Room Temperature ***** 
+Get Room Humidity *****
+## AUDIO SYSTEM COMMANDS

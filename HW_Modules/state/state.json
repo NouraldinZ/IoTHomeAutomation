@@ -1,0 +1,40 @@
+{
+    "device": "IoT Home Automation System",
+    "modules": {
+        "smartLight": {
+            "state": {
+                "lightsOn": true,
+                "connected": true,
+                "brightness": "number",
+                "temperature": "number",
+                "rgbMode": false,
+                "color": {
+                    "red": 255,
+                    "blue": 0,
+                    "green": 255
+                },
+                "color-sequence": "number"
+            }
+        },
+        "temperatureHumidity": {
+            "state": {
+                "temperature": {
+                    "celsius": 24,
+                    "fahrenheit": 75.2
+                },
+                "humidity": 8
+            }
+        },
+        "motion": {
+            "state": {
+                "motionDetected": false,
+                "timestamp": "N/A"
+            }
+        },
+        "audioSystem": {
+            "state": {
+                "connected": false
+            }
+        }
+    }
+}
